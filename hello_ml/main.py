@@ -27,7 +27,13 @@ if __name__ == "__main__":
     random.seed(69)
     w:float = random_num()
     esp: float = 1e-3
-    distance_cost = (cost(w)- esp) - cost(w)) / esp
-    w -= distance_cost
-    
-    print(f"Accuracy: {cost(w)}")
+    learning_rate: float = 1e-3;
+    epocs: int = 1000;
+    for i in range(epocs):
+
+        distance_cost = (cost(w + esp) - cost(w)) / esp
+
+        w -= distance_cost * learning_rate
+        print(cost(w))
+
+    print("weightage: ", w)
