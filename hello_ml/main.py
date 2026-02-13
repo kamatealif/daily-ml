@@ -1,5 +1,5 @@
 import random 
-train:float = [
+train = [
     [0, 0],
     [1, 2],
     [2, 4],
@@ -9,12 +9,25 @@ train:float = [
 
 def random_num ():
     return round(random.uniform(0, 10.0), 1);
+
+def cost(w:float):
+    result: flaot = 0.0;
+    for i in range(len(train)):
+        x:float = train[i][0]
+        y_hat:float = x * w;
+        y: float = train[i][1]
+        distance: float = y - y_hat
+        result = distance * distance
+    result /= len(train)
+
+    return result 
+
 #moduel formula is going to be for this y = x * w 
 if __name__ == "__main__":
     random.seed(69)
     w:float = random_num()
-    for i in range(len(train)):
-        x = train[i][0]
-        y = x * w;
-        print(f"Actual: {y}, expected: {train[i][1]}")
-
+    esp: float = 1e-3
+    distance_cost = (cost(w)- esp) - cost(w)) / esp
+    w -= distance_cost
+    
+    print(f"Accuracy: {cost(w)}")
