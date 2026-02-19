@@ -1,0 +1,15 @@
+[project]
+name = "machine-learning-daily"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "matplotlib>=3.10.8",
+    "scikit-learn>=1.8.0",
+]
+
+[tool.uv.workspace]
+members = [
+    "gradient_decent",
+]
