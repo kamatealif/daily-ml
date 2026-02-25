@@ -2,7 +2,7 @@ import random
 import math 
 
 
-# OR Gate
+# AND Gate
 train = [
     [0, 0, 0],
     [1, 0, 0],
@@ -31,6 +31,20 @@ def cost_func(w1, w2, b):
 def random_num (end: float = 1.0):
     return random.uniform(0, end)
 
+def predict(w1: float, w2: float, b: float, x1: float, x2: float):
+    return sigmoid(x1 * w1 + x2 * w2 + b)
+
+def accuracy(w1: float, w2: float, b: float):
+    correct = 0
+    for row in train:
+        x1: float = row[0]
+        x2: float = row[1]
+        expected: float = row[2]
+        predicted: int = 1 if predict(w1, w2, b, x1, x2) >= 0.5 else 0
+        if predicted == expected:
+            correct += 1
+    return correct / train_count
+
 
 if __name__ == "__main__":
     # random.seed(69)
@@ -51,14 +65,22 @@ if __name__ == "__main__":
         
         w1 -= rate * dw1
         w2 -= rate * dw2
-
-        def predict(x1: float, x2: float):
-            return sigmoid(x1 * w1 + x2 * w2 + b)
         b -= rate * db
         
          # Predict on training set
     print("\n--- Predictions ---")
     for row in train:
         x1, x2, expected = row[0], row[1], row[2]
-        prediction = predict(x1, x2)
-        print(f"Input: [{x1}, {x2}], Expected: {expected}, Predicted: {prediction:.4f}")
+        prediction = predict(w1, w2, b, x1, x2)
+        predicted_class = 1 if prediction >= 0.5 else 0
+        print(
+            f"Input: [{x1}, {x2}], Expected: {expected}, "
+            f"Predicted: {prediction:.4f}, Class: {predicted_class}"
+        )
+
+    model_accuracy = accuracy(w1, w2, b)
+    correct_count = int(model_accuracy * train_count)
+    print(
+        f"\nModel accuracy on full dataset: "
+        f"{model_accuracy * 100:.2f}% ({correct_count}/{train_count})"
+    )
