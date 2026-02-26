@@ -139,6 +139,36 @@ def scale_new_row(x_row: list[float], means: list[float], stds: list[float]) -> 
     return [(x_row[i] - means[i]) / stds[i] for i in range(len(x_row))]
 
 
+def evaluate_model(y_true: list[float], y_pred: list[float]) -> tuple[float, float, float]:
+    """
+    Return percentage-style regression metrics:
+    1) MAPE-based accuracy in %
+    2) R-squared in %
+    3) MAE in target units
+    """
+    count = len(y_true)
+
+    # Mean Absolute Error (target units)
+    mae = sum(abs(t - p) for t, p in zip(y_true, y_pred)) / count
+
+    # Mean Absolute Percentage Error (skip zero targets for safety)
+    ape_values: list[float] = []
+    for t, p in zip(y_true, y_pred):
+        if t != 0:
+            ape_values.append(abs((t - p) / t))
+    mape = (sum(ape_values) / len(ape_values)) if ape_values else 0.0
+    mape_accuracy_pct = max(0.0, 100.0 - (mape * 100.0))
+
+    # R-squared (coefficient of determination)
+    y_mean = sum(y_true) / count
+    ss_res = sum((t - p) ** 2 for t, p in zip(y_true, y_pred))
+    ss_tot = sum((t - y_mean) ** 2 for t in y_true)
+    r2 = 1.0 - (ss_res / ss_tot) if ss_tot != 0 else 1.0
+    r2_pct = r2 * 100.0
+
+    return mape_accuracy_pct, r2_pct, mae
+
+
 if __name__ == "__main__":
     random.seed(69)
 
@@ -154,16 +184,32 @@ if __name__ == "__main__":
 
     # 4) Show predictions on training rows (converted back to original score scale)
     print("\n--- Training Predictions ---")
+    training_predictions: list[float] = []
     for x_row_raw, y_true in zip(x_raw, y_raw):
         x_row_scaled = scale_new_row(x_row_raw, x_means, x_stds)
         y_pred_scaled = predict(final_weights, final_bias, x_row_scaled)
         y_pred_original = y_pred_scaled * y_std + y_mean
+        training_predictions.append(y_pred_original)
+
+        # Per-row floating percentage accuracy
+        if y_true != 0:
+            row_accuracy_pct = max(0.0, 100.0 - (abs(y_true - y_pred_original) / y_true) * 100.0)
+        else:
+            row_accuracy_pct = 0.0
         print(
             f"Input={x_row_raw} | Expected {TARGET_NAME}={y_true:.1f} | "
-            f"Predicted {TARGET_NAME}={y_pred_original:.2f}"
+            f"Predicted {TARGET_NAME}={y_pred_original:.2f} | "
+            f"Row accuracy={row_accuracy_pct:.2f}%"
         )
 
-    # 5) Predict for one new sample
+    # 5) Show overall model percentage metrics
+    mape_accuracy_pct, r2_pct, mae = evaluate_model(y_raw, training_predictions)
+    print("\n--- Model Accuracy ---")
+    print(f"MAPE accuracy: {mape_accuracy_pct:.2f}%")
+    print(f"R^2 score: {r2_pct:.2f}%")
+    print(f"MAE: {mae:.2f} {TARGET_NAME} points")
+
+    # 6) Predict for one new sample
     new_student = [7.5, 7.0, 3.0]  # [hours_studied, sleep_hours, practice_tests]
     new_student_scaled = scale_new_row(new_student, x_means, x_stds)
     new_score_scaled = predict(final_weights, final_bias, new_student_scaled)
@@ -205,6 +251,11 @@ Final learned parameters (on standardized data):
 Example prediction:
 - Input row: {new_student}
 - Predicted {TARGET_NAME}: {new_score:.2f}
+
+Overall training metrics:
+- MAPE accuracy: {mape_accuracy_pct:.2f}%
+- R^2 score: {r2_pct:.2f}%
+- MAE: {mae:.2f} {TARGET_NAME} points
 
 This example is simple by design, so you can add/remove columns or
 change learning rate and epochs to observe training behavior.
