@@ -257,7 +257,7 @@ Overall training metrics:
 - R^2 score: {r2_pct:.2f}%
 - MAE: {mae:.2f} {TARGET_NAME} points
 
-This example is simple by design, so you can add/remove columns or
-change learning rate and epochs to observe training behavior.
+ This example is simple by design, so after i can add/remove columns or
+ change learning rate and epochs to observe training behavior.
 """
     print(description)
