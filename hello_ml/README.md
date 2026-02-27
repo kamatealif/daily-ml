@@ -6,6 +6,8 @@ This folder contains simple models trained from scratch using Python:
   - `and_gate.py`
   - `or_gates.py`
   - `nand_gate.py`
+- A 2-layer neural network for XOR:
+  - `xor_gate.py`
 - A linear regression model:
   - `main.py`
 
@@ -22,6 +24,7 @@ From this directory:
 python and_gate.py
 python or_gates.py
 python nand_gate.py
+python xor_gate.py
 python main.py
 ```
 
@@ -135,6 +138,29 @@ Observed run output:
 
 - `weightage` near `2.0`
 - `bias` near `0.0`
+
+### 5) XOR Gate (`xor_gate.py`)
+
+Truth table used for training:
+
+| x1 | x2 | y |
+|---|---|---|
+| 0 | 0 | 0 |
+| 0 | 1 | 1 |
+| 1 | 0 | 1 |
+| 1 | 1 | 0 |
+
+Details:
+
+- Model: 2-layer network (`2 -> 2 -> 1`) with sigmoid activations
+- Optimizer: gradient descent with analytic gradients (backpropagation)
+- Loss: mean squared error (MSE)
+- Epochs: `20000`
+- Learning rate: `1.0`
+
+Observed run output:
+
+- Accuracy: `100.00% (4/4)`
 
 ## Notes
 
