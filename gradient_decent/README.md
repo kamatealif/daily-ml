@@ -114,7 +114,7 @@ Batch gradient descent means:
 - slower on large datasets because every update uses every sample
 - needs feature scaling for reliable convergence
 
-### 3. `StochasticGradientDescentRegressor`
+### 3. `mini_batch_gradient_decent.py`
 
 File: `mini_batch_gradient_decent.py`
 
@@ -230,19 +230,19 @@ Because the custom models teach:
 
 - gradient computation
 - convergence behavior
-- the difference between batch and stochastic updates
+- the difference between batch, mini-batch, and stochastic updates
 - why scaling and learning rate matter
 
 ## Batch GD vs Mini-Batch GD vs SGD
 
-| Topic | Batch Gradient Descent | Mini-Batch Gradient Descent | Stochastic Gradient Descent |
-| --- | --- | --- | --- |
-| Update timing | Once per epoch | Once per mini-batch | Once per sample |
-| Gradient source | Full dataset | Small subset of data | Single sample |
-| Training behavior | Smooth and stable | Balanced | Noisy and jumpy |
-| Speed per update | Slowest | Moderate | Fastest |
-| Best for | Small/medium datasets | Most practical training setups | Large datasets / online learning |
-| Tuning difficulty | Easier | Moderate | Usually harder |
+| Topic             | Batch Gradient Descent | Mini-Batch Gradient Descent    | Stochastic Gradient Descent      |
+| ----------------- | ---------------------- | ------------------------------ | -------------------------------- |
+| Update timing     | Once per epoch         | Once per mini-batch            | Once per sample                  |
+| Gradient source   | Full dataset           | Small subset of data           | Single sample                    |
+| Training behavior | Smooth and stable      | Balanced                       | Noisy and jumpy                  |
+| Speed per update  | Slowest                | Moderate                       | Fastest                          |
+| Best for          | Small/medium datasets  | Most practical training setups | Large datasets / online learning |
+| Tuning difficulty | Easier                 | Moderate                       | Usually harder                   |
 
 ## Which Model Should You Use?
 
@@ -279,6 +279,7 @@ Use `LinearRegression` from scikit-learn when:
 
 - `main.py`: simple one-feature gradient descent regression
 - `batch_gradient_descent_salary_example.py`: multi-feature batch gradient descent example
+- `mini_batch_gradient_decent.py`: mini-batch gradient descent example on dummy tabular data
 - `stochastic_gradient_descent_example.py`: multi-feature stochastic gradient descent example
 - `by_sk_learn.ipynb`: learning notebook comparing scikit-learn and custom work
 - `batch_gradient_decent_for_diabetes.ipynb.ipynb`: batch gradient descent on the diabetes dataset
@@ -297,6 +298,7 @@ Then run any script:
 ```bash
 python main.py
 python batch_gradient_descent_salary_example.py
+python mini_batch_gradient_decent.py
 python stochastic_gradient_descent_example.py
 ```
 
@@ -305,7 +307,7 @@ python stochastic_gradient_descent_example.py
 This repo is useful because it shows the same machine learning idea from different levels:
 
 - beginner level: understand slope, bias, and loss
-- intermediate level: move to multiple features and scaled inputs
+- intermediate level: compare batch, mini-batch, and stochastic updates
 - practical level: compare custom code with scikit-learn
 
-If your main goal is learning, start with `main.py`, then read the batch example, then compare it with the stochastic version.
+If your main goal is learning, start with `main.py`, then read the batch example, then the mini-batch script, and finally compare that flow with the stochastic version.
