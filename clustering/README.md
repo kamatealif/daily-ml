@@ -80,7 +80,7 @@ Note: KNN is usually a classification or regression algorithm, not a clustering 
 
 ## Setup
 
-Install Pygame if you do not already have it:
+Install Pygame if you want to run the interactive K-Means and KNN demos:
 
 ```bash
 pip install pygame
@@ -132,9 +132,10 @@ python knn_example.py
 
 ## Why This Project Is Useful
 
-These examples are helpful for learning because they make the algorithms visible:
+These examples are helpful for learning because they make the algorithms visible and step-by-step:
 
 - You can see how distance affects grouping and prediction.
+- You can follow hierarchical clustering merge decisions one step at a time.
 - You can experiment with different values of `K` or `k`.
 - You can build intuition without needing a dataset file or a heavy ML library.
 
